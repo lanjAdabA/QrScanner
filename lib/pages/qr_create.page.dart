@@ -16,26 +16,29 @@ class _QrCreatePageState extends State<QrCreatePage> {
       appBar: AppBar(
         title: const Text("Qr Code Generator"),
       ),
-      body: SafeArea(
-          child: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              QrImage(
-                data: controller.text,
-                size: MediaQuery.of(context).size.height / 3,
-                backgroundColor: Colors.white,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 5,
-              ),
-              buildTextField(context)
-            ],
+      body: Container(
+        color: Colors.purple[50],
+        child: SafeArea(
+            child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                QrImage(
+                  data: controller.text,
+                  size: MediaQuery.of(context).size.height / 3,
+                  backgroundColor: Colors.white,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 5,
+                ),
+                buildTextField(context)
+              ],
+            ),
           ),
-        ),
-      )),
+        )),
+      ),
     );
   }
 
@@ -43,12 +46,12 @@ class _QrCreatePageState extends State<QrCreatePage> {
     return TextField(
       controller: controller,
       style: const TextStyle(
-        color: Colors.grey,
+        color: Colors.black,
         fontWeight: FontWeight.bold,
         fontSize: 20,
       ),
       decoration: InputDecoration(
-          hintText: "Enter The Data",
+          hintText: "Enter Data",
           hintStyle: const TextStyle(color: Colors.grey),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
