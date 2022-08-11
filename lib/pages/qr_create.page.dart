@@ -43,7 +43,7 @@ class _QrCreatePageState extends State<QrCreatePage> {
     return TextField(
       controller: controller,
       style: const TextStyle(
-        color: Colors.white,
+        color: Colors.grey,
         fontWeight: FontWeight.bold,
         fontSize: 20,
       ),
