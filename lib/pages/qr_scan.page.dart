@@ -1,3 +1,4 @@
+import 'package:animator/animator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -72,7 +73,9 @@ class _QrScannerPageState extends State<QrScannerPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('Barcode scan')),
       body: Container(
         color: Colors.purple[50],
@@ -80,83 +83,80 @@ class _QrScannerPageState extends State<QrScannerPage> {
           padding: const EdgeInsets.all(30),
           child: Form(
             child: Column(
-               mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextFormField(
                     controller: TextEditingController(
                         text: scannedData != null ? scannedData!.name : ''),
-                    decoration:  InputDecoration( border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-hintText: 'Name')),                        
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      labelText: 'Name',
+                    )),
                 TextFormField(
                     controller: TextEditingController(
                         text: scannedData != null ? scannedData!.uid : ''),
-                    decoration: InputDecoration(                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-
-                        hintText: scannedData != null
-                            ? scannedData!.gender
-                            : 'UID')),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      labelText: 'UID',
+                    )),
                 TextFormField(
                     controller: TextEditingController(
-                        text: scannedData != null ? scannedData!.gender : ''),
-                    decoration: InputDecoration(                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-
-                        hintText: scannedData != null
-                            ? scannedData!.gender
-                            : 'gender')),
+                        text: scannedData != null ? scannedData!.gender : ""),
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        labelText: 'Gender')),
                 TextFormField(
                     controller: TextEditingController(
                         text: scannedData != null ? scannedData!.dob : ''),
-                    decoration: InputDecoration(                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-
-                        hintText:
-                            scannedData != null ? scannedData!.dob : 'DOB')),
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        labelText: 'DOB')),
                 TextFormField(
                     controller: TextEditingController(
                         text: scannedData != null ? scannedData!.loc : ''),
-                    decoration: InputDecoration(                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-
-                        hintText: scannedData != null
-                            ? scannedData!.loc
-                            : 'Address')),
-                 TextFormField(
-                     controller: TextEditingController(
-                         text: scannedData != null ? scannedData!.vtc : ''),
-                     decoration: InputDecoration(                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-
-                         hintText: scannedData != null
-                             ? scannedData!.loc
-                             : 'Town')), TextFormField(
-                                 controller: TextEditingController(
-                                     text: scannedData != null ? scannedData!.po : ''),
-                                 decoration: InputDecoration(                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-
-                                     hintText: scannedData != null
-                                         ? scannedData!.loc
-                                         : 'Post Office')), TextFormField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        labelText: 'Address')),
+                TextFormField(
+                    controller: TextEditingController(
+                        text: scannedData != null ? scannedData!.vtc : ''),
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        labelText: 'Town')),
+                TextFormField(
+                    controller: TextEditingController(
+                        text: scannedData != null ? scannedData!.po : ''),
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        labelText: 'Post Office')),
+                TextFormField(
                     controller: TextEditingController(
                         text: scannedData != null ? scannedData!.dist : ''),
-                    decoration: InputDecoration(                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-
-                        hintText: scannedData != null
-                            ? scannedData!.loc
-                            : 'District')), TextFormField(
-                                controller: TextEditingController(
-                                    text: scannedData != null ? scannedData!.state : ''),
-                                decoration: InputDecoration(                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-
-                                    hintText: scannedData != null
-                                        ? scannedData!.loc
-                                        : 'State')),
-                 TextFormField( 
-                
-                     controller: TextEditingController(
-                         text: scannedData != null ? scannedData!.pc : ''),
-                     decoration:
-                      InputDecoration( 
-                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                         hintText: scannedData != null
-                             ? scannedData!.loc
-                             : 'Pin Code')),
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        labelText: 'District')),
+                TextFormField(
+                    controller: TextEditingController(
+                        text: scannedData != null ? scannedData!.state : ''),
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        labelText: 'State')),
+                TextFormField(
+                    controller: TextEditingController(
+                        text: scannedData != null ? scannedData!.pc : ''),
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        labelText: 'Pin Code')),
                 GestureDetector(
                   onTap: () async {
                     String barcodeScanRes =
@@ -201,10 +201,25 @@ hintText: 'Name')),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.qr_code_scanner,
-                        size: MediaQuery.of(context).size.width / 6,
+                      SizedBox(
+                        height: width / 2.7,
+                        width: width / 2.7,
+                        child: Animator<double>(
+                          duration: const Duration(milliseconds: 1000),
+                          cycles: 0,
+                          curve: Curves.easeInOutCirc,
+                          tween: Tween<double>(begin: 20.0, end: 25.0),
+                          builder: (context, animatorState, child) => Icon(
+                            Icons.qr_code_scanner,
+                            size: animatorState.value * 5,
+                          ),
+                        ),
                       ),
+
+                      // Icon(
+                      //   Icons.qr_code_scanner,
+                      //   size: MediaQuery.of(context).size.width / 6,
+                      // ),
                       Text(
                         "Open Scanner ",
                         style: TextStyle(
