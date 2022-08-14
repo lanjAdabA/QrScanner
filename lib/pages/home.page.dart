@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("QR CREATER & SCANNER"),
+        title: const Text("QR gen/scanR"),
         centerTitle: true,
       ),
       body: Container(
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
                       size: MediaQuery.of(context).size.width / 3,
                     ),
                     Text(
-                      "Create a QR code",
+                      "Create custom QR",
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width * .048,
                           fontWeight: FontWeight.bold,
@@ -56,7 +56,49 @@ class _HomePageState extends State<HomePage> {
                       size: MediaQuery.of(context).size.width / 3,
                     ),
                     Text(
-                      "Scan a QR code",
+                      "QR Code Scanner",
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width * .048,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueAccent),
+                    )
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  context.router.push(const AadhaarScannerRoute());
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.qr_code_2,
+                      size: MediaQuery.of(context).size.width / 3,
+                    ),
+                    Text(
+                      "Scan an Aadhaar",
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width * .048,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueAccent),
+                    )
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  context.router.push(const UploadImageRoute());
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.upload_file,
+                      size: MediaQuery.of(context).size.width / 3,
+                    ),
+                    Text(
+                      "Upload  a Picture",
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width * .048,
                           fontWeight: FontWeight.bold,

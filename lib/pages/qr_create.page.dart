@@ -15,6 +15,7 @@ class _QrCreatePageState extends State<QrCreatePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Qr Code Generator"),
+        centerTitle: true,
       ),
       body: Container(
         color: Colors.purple[50],
