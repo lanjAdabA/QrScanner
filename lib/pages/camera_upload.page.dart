@@ -2,34 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-enum AppState {
-  free,
-  picked,
-  cropped,
-}
-
-class UploadImagePage extends StatefulWidget {
-  const UploadImagePage({Key? key}) : super(key: key);
+class UploadCameraPage extends StatefulWidget {
+  const UploadCameraPage({Key? key}) : super(key: key);
 
   @override
-  State<UploadImagePage> createState() => _UploadImagePageState();
+  State<UploadCameraPage> createState() => _UploadImagePageState();
 }
 
-class _UploadImagePageState extends State<UploadImagePage> {
-  late AppState state;
-
+class _UploadImagePageState extends State<UploadCameraPage> {
   File? frontImage;
   File? backImage;
-
-  @override
-  void initState() {
-    super.initState();
-    state = AppState.free;
-  }
-
   Future pickFrontImage(imageSource) async {
     try {
       final frontImage = await ImagePicker().pickImage(source: imageSource);
@@ -56,19 +40,6 @@ class _UploadImagePageState extends State<UploadImagePage> {
     } on PlatformException catch (e) {
       print("failed to choose an BackImage: $e");
     }
-  }
-
-  Future cropFrontImage(ImageSource gallery) async {
-    CroppedFile? croppedFile = await ImageCropper().cropImage(
-      sourcePath: frontImage!.path,
-    );
-  }
-
-  void clearFrontImage() {
-    frontImage = null;
-    setState(() {
-      state = AppState.free;
-    });
   }
 
   @override
@@ -141,24 +112,16 @@ class _UploadImagePageState extends State<UploadImagePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 buildButton(
-                    icon: Icons.file_copy_outlined,
-                    title: 'Choose Front Page',
+                    icon: Icons.camera_alt_outlined,
+                    title: 'Click Front Page',
                     onClicked: () {
-                      if (state == AppState.free) {
-                        pickFrontImage(ImageSource.gallery);
-                      } else if (state == AppState.picked) {
-                        cropFrontImage(ImageSource.gallery);
-                      } else if (state == AppState.free) {
-                        clearFrontImage();
-                      }
+                      pickFrontImage(ImageSource.camera);
                     }),
                 buildButton(
-                    icon: Icons.file_copy_outlined,
-                    title: 'Choose Back Page',
+                    icon: Icons.camera_alt_outlined,
+                    title: 'Click Back Page',
                     onClicked: () {
-                      pickBackImage(
-                        ImageSource.gallery,
-                      );
+                      pickBackImage(ImageSource.camera);
                     }),
               ],
             ),
@@ -192,29 +155,27 @@ class _UploadImagePageState extends State<UploadImagePage> {
           ],
         ));
   }
+}
 
-  buildUploadButton(
-      {required IconData icon,
-      required String title,
-      required Null Function() onClicked}) {
-    {
-      return ElevatedButton(
-          style: ElevatedButton.styleFrom(primary: Colors.blue),
-          onPressed: onClicked,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: 60,
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Text(title)
-            ],
-          ));
-    }
-  }
+buildUploadButton(
+    {required IconData icon,
+    required String title,
+    required Null Function() onClicked}) {
+  return ElevatedButton(
+      style: ElevatedButton.styleFrom(primary: Colors.blue),
+      onPressed: onClicked,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            size: 60,
+          ),
+          const SizedBox(
+            width: 16,
+          ),
+          Text(title)
+        ],
+      ));
 }

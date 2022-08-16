@@ -115,6 +115,7 @@ class _AadhaarScannerPageState extends State<AadhaarScannerPage> {
                     String barcodeScanRes =
                         await FlutterBarcodeScanner.scanBarcode(
                             "#ff6666", "Cancel", true, ScanMode.QR);
+                    // ! * ? todo log(scannedData.toString());
                     var a = XmlDocument.parse(barcodeScanRes);
 
                     var e = a.getElement("PrintLetterBarcodeData");
