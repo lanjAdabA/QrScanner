@@ -5,12 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-enum AppState {
-  free,
-  picked,
-  cropped,
-}
-
 class UploadImagePage extends StatefulWidget {
   const UploadImagePage({Key? key}) : super(key: key);
 
@@ -19,16 +13,8 @@ class UploadImagePage extends StatefulWidget {
 }
 
 class _UploadImagePageState extends State<UploadImagePage> {
-  late AppState state;
-
   File? frontImage;
   File? backImage;
-
-  @override
-  void initState() {
-    super.initState();
-    state = AppState.free;
-  }
 
   Future pickFrontImage(imageSource) async {
     try {
@@ -64,13 +50,6 @@ class _UploadImagePageState extends State<UploadImagePage> {
     );
   }
 
-  void clearFrontImage() {
-    frontImage = null;
-    setState(() {
-      state = AppState.free;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -80,11 +59,13 @@ class _UploadImagePageState extends State<UploadImagePage> {
         centerTitle: true,
       ),
       body: Container(
+        padding: const EdgeInsets.all(20),
         color: Colors.purple[50],
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 frontImage != null
                     ? FittedBox(
@@ -95,7 +76,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                       )
                     : GestureDetector(
                         onTap: (() {
-                          pickFrontImage(ImageSource.gallery);
+                          cropFrontImage(ImageSource.gallery);
                         }),
                         child: Container(
                             decoration: BoxDecoration(
@@ -137,20 +118,23 @@ class _UploadImagePageState extends State<UploadImagePage> {
                       ),
               ],
             ),
-            Row(
+
+            /*  Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 buildButton(
                     icon: Icons.file_copy_outlined,
                     title: 'Choose Front Page',
                     onClicked: () {
-                      if (state == AppState.free) {
-                        pickFrontImage(ImageSource.gallery);
-                      } else if (state == AppState.picked) {
-                        cropFrontImage(ImageSource.gallery);
-                      } else if (state == AppState.free) {
-                        clearFrontImage();
-                      }
+                      pickFrontImage(ImageSource.gallery);
+
+                      // if (state == AppState.free) {
+                      //   pickFrontImage(ImageSource.gallery);
+                      // } else if (state == AppState.picked) {
+                      //   cropFrontImage(ImageSource.gallery);
+                      // } else if (state == AppState.free) {
+                      //   clearFrontImage();
+                      // }
                     }),
                 buildButton(
                     icon: Icons.file_copy_outlined,
@@ -161,7 +145,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                       );
                     }),
               ],
-            ),
+            ), */
             buildUploadButton(
                 icon: Icons.upload_file,
                 title: 'Upload Files',
