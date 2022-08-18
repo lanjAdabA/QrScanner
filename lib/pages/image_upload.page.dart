@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -13,42 +12,9 @@ class UploadImagePage extends StatefulWidget {
 }
 
 class _UploadImagePageState extends State<UploadImagePage> {
+  final ImagePicker picker = ImagePicker();
   File? frontImage;
   File? backImage;
-
-  Future pickFrontImage(imageSource) async {
-    try {
-      final frontImage = await ImagePicker().pickImage(source: imageSource);
-      if (frontImage == null) return;
-
-      final imageTemp = File(frontImage.path);
-      setState(() {
-        this.frontImage = imageTemp;
-      });
-    } on PlatformException catch (e) {
-      print("failed to choose an frontImage: $e");
-    }
-  }
-
-  Future pickBackImage(imageSource) async {
-    try {
-      final backImage = await ImagePicker().pickImage(source: imageSource);
-      if (backImage == null) return;
-
-      final imageTemp = File(backImage.path);
-      setState(() {
-        this.backImage = imageTemp;
-      });
-    } on PlatformException catch (e) {
-      print("failed to choose an BackImage: $e");
-    }
-  }
-
-  Future cropFrontImage(ImageSource gallery) async {
-    CroppedFile? croppedFile = await ImageCropper().cropImage(
-      sourcePath: frontImage!.path,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,13 +36,35 @@ class _UploadImagePageState extends State<UploadImagePage> {
                 frontImage != null
                     ? FittedBox(
                         fit: BoxFit.fill,
-                        child: Image.file(frontImage!,
-                            width: MediaQuery.of(context).size.width * .4,
-                            height: MediaQuery.of(context).size.height * .4),
+                        child: Image.file(
+                          frontImage!,
+                          height: h / 3.8,
+                          width: h / 2.5,
+                        ),
                       )
                     : GestureDetector(
-                        onTap: (() {
-                          cropFrontImage(ImageSource.gallery);
+                        onTap: (() async {
+                          var img = await picker.pickImage(
+                              source: ImageSource.gallery);
+
+                          CroppedFile? val = await ImageCropper().cropImage(
+                            uiSettings: [
+                              AndroidUiSettings(
+                                toolbarColor: Colors.white,
+                                toolbarTitle: "Image Cropper",
+                              )
+                            ],
+                            sourcePath: img!.path,
+                            aspectRatio:
+                                const CropAspectRatio(ratioX: 20, ratioY: 13),
+                            maxHeight: 600,
+                            maxWidth: 600,
+                            compressFormat: ImageCompressFormat.jpg,
+                          );
+                          final temp = File(val!.path);
+                          setState(() {
+                            frontImage = temp;
+                          });
                         }),
                         child: Container(
                             decoration: BoxDecoration(
@@ -96,13 +84,35 @@ class _UploadImagePageState extends State<UploadImagePage> {
                 backImage != null
                     ? FittedBox(
                         fit: BoxFit.fill,
-                        child: Image.file(backImage!,
-                            width: MediaQuery.of(context).size.width * .4,
-                            height: MediaQuery.of(context).size.height * .4),
+                        child: Image.file(
+                          backImage!,
+                          height: h / 3.8,
+                          width: h / 2.5,
+                        ),
                       )
                     : GestureDetector(
-                        onTap: (() {
-                          pickBackImage(ImageSource.gallery);
+                        onTap: (() async {
+                          var img = await picker.pickImage(
+                              source: ImageSource.gallery);
+
+                          CroppedFile? val = await ImageCropper().cropImage(
+                            uiSettings: [
+                              AndroidUiSettings(
+                                toolbarColor: Colors.white,
+                                toolbarTitle: "Image Cropper",
+                              )
+                            ],
+                            sourcePath: img!.path,
+                            aspectRatio:
+                                const CropAspectRatio(ratioX: 20, ratioY: 13),
+                            maxHeight: 600,
+                            maxWidth: 600,
+                            compressFormat: ImageCompressFormat.jpg,
+                          );
+                          final temp = File(val!.path);
+                          setState(() {
+                            backImage = temp;
+                          });
                         }),
                         child: Container(
                             decoration: BoxDecoration(
@@ -118,34 +128,6 @@ class _UploadImagePageState extends State<UploadImagePage> {
                       ),
               ],
             ),
-
-            /*  Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                buildButton(
-                    icon: Icons.file_copy_outlined,
-                    title: 'Choose Front Page',
-                    onClicked: () {
-                      pickFrontImage(ImageSource.gallery);
-
-                      // if (state == AppState.free) {
-                      //   pickFrontImage(ImageSource.gallery);
-                      // } else if (state == AppState.picked) {
-                      //   cropFrontImage(ImageSource.gallery);
-                      // } else if (state == AppState.free) {
-                      //   clearFrontImage();
-                      // }
-                    }),
-                buildButton(
-                    icon: Icons.file_copy_outlined,
-                    title: 'Choose Back Page',
-                    onClicked: () {
-                      pickBackImage(
-                        ImageSource.gallery,
-                      );
-                    }),
-              ],
-            ), */
             buildUploadButton(
                 icon: Icons.upload_file,
                 title: 'Upload Files',
@@ -154,27 +136,6 @@ class _UploadImagePageState extends State<UploadImagePage> {
         ),
       ),
     );
-  }
-
-  buildButton(
-      {required String title,
-      required IconData icon,
-      required VoidCallback onClicked}) {
-    return ElevatedButton(
-        style: ElevatedButton.styleFrom(primary: Colors.blue),
-        onPressed: onClicked,
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              size: 30,
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            Text(title)
-          ],
-        ));
   }
 
   buildUploadButton(

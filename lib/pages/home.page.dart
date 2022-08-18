@@ -114,17 +114,17 @@ class _HomePageState extends State<HomePage> {
                                     clipBehavior: Clip.none,
                                     // fit: StackFit.expand,
                                     children: const [
-                                      Opacity(
-                                        opacity: .9,
-                                        child: Positioned(
-                                          left: 20,
-                                          child: Icon(
-                                            Icons.image,
-                                            size: 100,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ),
+                                      // Opacity(
+                                      //   opacity: .9,
+                                      //   child: Positioned(
+                                      //     left: 20,
+                                      //     child: Icon(
+                                      //       Icons.image,
+                                      //       size: 100,
+                                      //       color: Colors.grey,
+                                      //     ),
+                                      //   ),
+                                      // ),
                                       Opacity(
                                         opacity: .9,
                                         child: Positioned(
