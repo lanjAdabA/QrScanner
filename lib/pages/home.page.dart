@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:qrscanner/router/router.gr.dart';
+import 'package:qrscanner/widgets/login_icon.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,9 +14,37 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("QR gen/scanR"),
         centerTitle: true,
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.login),
+              onPressed: () {
+                const LogInWidget();
+              }
+              //  {
+              //   StreamBuilder<User?>(
+              //     stream: FirebaseAuth.instance.authStateChanges(),
+              //     builder: (context, snapshot) {
+              //       if (snapshot.hasData) {
+              //         return const HomePage();
+              //       } else {
+              //         return const SignInPage();
+
+              //         //     IconButton(
+              //         //   icon: const Icon(Icons.login),
+              //         //   onPressed: () {
+              //         //     context.router.push(const SignInRoute());
+              //         //   },
+              //         // );
+              //       }
+              //     },
+              //   );
+              // },
+              )
+        ],
       ),
       body: Container(
         color: Colors.purple[50],
@@ -112,26 +141,14 @@ class _HomePageState extends State<HomePage> {
                                   Stack(
                                     alignment: Alignment.bottomRight,
                                     clipBehavior: Clip.none,
-                                    // fit: StackFit.expand,
                                     children: const [
-                                      // Opacity(
-                                      //   opacity: .9,
-                                      //   child: Positioned(
-                                      //     left: 20,
-                                      //     child: Icon(
-                                      //       Icons.image,
-                                      //       size: 100,
-                                      //       color: Colors.grey,
-                                      //     ),
-                                      //   ),
-                                      // ),
                                       Opacity(
                                         opacity: .9,
                                         child: Positioned(
                                           bottom: -59,
                                           child: Icon(
                                             Icons.photo_camera_back_outlined,
-                                            size: 100,
+                                            size: 80,
                                             color: Colors.blueGrey,
                                           ),
                                         ),
@@ -162,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               const SizedBox(
                                 height: 30,
-                              )
+                              ),
                             ],
                           ),
                         );
@@ -177,6 +194,27 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Text(
                       "Upload Aadhaar ",
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width * .048,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueAccent),
+                    )
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  context.router.push(const CreateIdFolderRoute());
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.upload_file,
+                      size: MediaQuery.of(context).size.width / 3,
+                    ),
+                    Text(
+                      "Upload more IDs",
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width * .048,
                           fontWeight: FontWeight.bold,

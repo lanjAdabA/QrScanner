@@ -41,6 +41,9 @@ dependencies:
   animator: ^3.2.0
   image_picker: ^0.8.5+3
   image_cropper: ^3.0.0
+  firebase_core: ^1.21.0
+  firebase_auth: ^3.6.4
+  firebase_storage: ^10.3.7
 
 dev_dependencies:
   flutter_test:

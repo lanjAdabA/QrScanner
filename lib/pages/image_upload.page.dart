@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:qrscanner/storage_service.dart';
 
 class UploadImagePage extends StatefulWidget {
   const UploadImagePage({Key? key}) : super(key: key);
@@ -14,10 +15,17 @@ class UploadImagePage extends StatefulWidget {
 class _UploadImagePageState extends State<UploadImagePage> {
   final ImagePicker picker = ImagePicker();
   File? frontImage;
+
+  Future uploadFrontImage() async {
+    const path = "file/Aadhaar-Front.jpg";
+    final file = File(frontImage!.path);
+  }
+
   File? backImage;
 
   @override
   Widget build(BuildContext context) {
+    final Storage storage = Storage();
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
