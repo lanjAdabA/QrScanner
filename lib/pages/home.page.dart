@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -266,11 +265,18 @@ class MyWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyWidget> {
+  String imgUrl = '';
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        SizedBox(
+          height: 200,
+          width: 200,
+          child: Visibility(
+              visible: imgUrl.isNotEmpty, child: Image.network(imgUrl)),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -288,10 +294,12 @@ class _MyWidgetState extends State<MyWidget> {
 
                   final fileName = res.files.single.name;
                   final file = File(path);
-                  await storage
-                      .ref("image/$fileName")
-                      .putFile(file)
-                      .whenComplete(() => log("Uploaded"));
+                  final ref = storage.ref("image/$fileName");
+                  final url = ref.putFile(file);
+                  final u = await url.snapshot.ref.getDownloadURL();
+                  setState(() {
+                    imgUrl = u;
+                  });
                 },
                 child: const Text("UPLOAD")),
           ],
