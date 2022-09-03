@@ -72,5 +72,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation platform('com.google.firebase:firebase-bom:30.3.2')
     implementation 'com.google.firebase:firebase-analytics'
+    // classpath 'com.google.gms:google-services:4.3.13'
     // implementation 'com.asndroid.support:multidex:1.0.3'
 }   
