@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -16,10 +17,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
   final ImagePicker picker = ImagePicker();
   File? frontImage;
 
-  Future uploadFrontImage() async {
-    const path = "file/Aadhaar-Front.jpg";
-    final file = File(frontImage!.path);
-  }
+  Future uploadFrontImage() async {}
 
   File? backImage;
 
@@ -72,6 +70,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                           final temp = File(val!.path);
                           setState(() {
                             frontImage = temp;
+                            log(frontImage.toString());
                           });
                         }),
                         child: Container(
@@ -120,6 +119,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                           final temp = File(val!.path);
                           setState(() {
                             backImage = temp;
+                            log(backImage.toString());
                           });
                         }),
                         child: Container(
@@ -139,7 +139,11 @@ class _UploadImagePageState extends State<UploadImagePage> {
             buildUploadButton(
                 icon: Icons.upload_file,
                 title: 'Upload Files',
-                onClicked: () {}),
+                onClicked: () {
+                  const path = "file/Aadhaar-Front.jpg";
+                  final fileName = File(frontImage!.path);
+                  storage.uploadFile(path, fileName).then((value) => log(path));
+                }),
           ],
         ),
       ),
