@@ -293,7 +293,7 @@ class _MyWidgetState extends State<MyWidget> {
                       .putFile(file)
                       .whenComplete(() => log("Uploaded"));
                 },
-                child: const Text("Check")),
+                child: const Text("UPLOAD")),
           ],
         )
       ],
