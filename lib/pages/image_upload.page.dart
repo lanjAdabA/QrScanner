@@ -159,14 +159,14 @@ class _UploadImagePageState extends State<UploadImagePage> {
                   final frontfileName = frontImg.files.single.name;
                   final frontfile = File(frontPath);
                   final frontref = storage.ref("image/$frontfileName");
-                  final fronturl = ref.putFile(frontfile);
+                  final fronturl = frontref.putFile(frontfile);
                   final fronturlsnap =
                       await fronturl.snapshot.ref.getDownloadURL();
                   final backPath = backImg.files.single.path;
                   final backfileName = backImg.files.single.name;
                   final backfile = File(backPath);
                   final backref = storage.ref("image/$backfileName");
-                  final backurl = ref.putFile(backfile);
+                  final backurl = backref.putFile(backfile);
                   final backurlsnap =
                       await backurl.snapshot.ref.getDownloadURL();
                   setState(() {
