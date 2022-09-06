@@ -150,37 +150,39 @@ class _UploadImagePageState extends State<UploadImagePage> {
                   //     type: FileType.custom,
                   //     allowedExtensions: ['png', 'jpg']);
 
-                  // final res = await FilePicker.platform.pickFiles(
-                  //     allowMultiple: false,
-                  //     type: FileType.custom,
-                  //     allowedExtensions: ['png', 'jpg']);
-
                   final frontImg = frontImage;
                   final backImg = backImage;
 
-                  // if (res == null) return;
                   if (frontImg == null && backImg == null) return;
+
                   final frontPath = frontImg.files.single.path;
                   final frontfileName = frontImg.files.single.name;
-                  final frontfile = File(path);
+                  final frontfile = File(frontPath);
                   final frontref = storage.ref("image/$frontfileName");
                   final fronturl = ref.putFile(frontfile);
                   final fronturlsnap =
                       await fronturl.snapshot.ref.getDownloadURL();
+                  final backPath = backImg.files.single.path;
+                  final backfileName = backImg.files.single.name;
+                  final backfile = File(backPath);
+                  final backref = storage.ref("image/$backfileName");
+                  final backurl = ref.putFile(backfile);
+                  final backurlsnap =
+                      await backurl.snapshot.ref.getDownloadURL();
                   setState(() {
                     frontimgUrl = fronturlsnap;
                   });
 
-                  // final path = res.files.single.path!;
-
-                  // final fileName = res.files.single.name;
-                  // final file = File(path);
-                  // final ref = storage.ref("image/$fileName");
-                  // final url = ref.putFile(file);
-                  // final u = await url.snapshot.ref.getDownloadURL();
-                  // setState(() {
-                  //   imgUrl = u;
-                  // });
+                  //todo if (res == null) return;
+                  //todo   final path = res.files.single.path!;
+                  //todo   final fileName = res.files.single.name;
+                  //todo   final file = File(path);
+                  //todo   final ref = storage.ref("image/$fileName");
+                  //todo   final url = ref.putFile(file);
+                  //todo   final u = await url.snapshot.ref.getDownloadURL();
+                  //todo   setState(() {
+                  //todo     imgUrl = u;
+                  //todo   });
                 },
                 child: const Text("UPLOAD")),
             // buildUploadButton(
