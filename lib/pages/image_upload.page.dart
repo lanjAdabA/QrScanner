@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:file_picker/file_picker.dart';
 
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -19,7 +18,8 @@ class UploadImagePage extends StatefulWidget {
 class _UploadImagePageState extends State<UploadImagePage> {
   final ImagePicker picker = ImagePicker();
   File? frontImage;
-  String imgUrl = '';
+  String frontimgUrl = '';
+  String backimgUrl = '';
 
   Future uploadFrontImage() async {}
 
@@ -54,26 +54,27 @@ class _UploadImagePageState extends State<UploadImagePage> {
                       )
                     : GestureDetector(
                         onTap: (() async {
-                          var img = await picker.pickImage(
+                          var pickedImgFront = await picker.pickImage(
                               source: ImageSource.gallery);
 
-                          CroppedFile? val = await ImageCropper().cropImage(
+                          CroppedFile? croppedImgFront =
+                              await ImageCropper().cropImage(
                             uiSettings: [
                               AndroidUiSettings(
                                 toolbarColor: Colors.white,
                                 toolbarTitle: "Image Cropper",
                               )
                             ],
-                            sourcePath: img!.path,
+                            sourcePath: pickedImgFront!.path,
                             aspectRatio:
                                 const CropAspectRatio(ratioX: 20, ratioY: 13),
                             maxHeight: 600,
                             maxWidth: 600,
                             compressFormat: ImageCompressFormat.jpg,
                           );
-                          final temp = File(val!.path);
+                          final fronttemp = File(croppedImgFront!.path);
                           setState(() {
-                            frontImage = temp;
+                            frontImage = fronttemp;
                             log(frontImage.toString());
                           });
                         }),
@@ -103,26 +104,27 @@ class _UploadImagePageState extends State<UploadImagePage> {
                       )
                     : GestureDetector(
                         onTap: (() async {
-                          var img = await picker.pickImage(
+                          var pickedImgBack = await picker.pickImage(
                               source: ImageSource.gallery);
 
-                          CroppedFile? val = await ImageCropper().cropImage(
+                          CroppedFile? croppedImgBack =
+                              await ImageCropper().cropImage(
                             uiSettings: [
                               AndroidUiSettings(
                                 toolbarColor: Colors.white,
                                 toolbarTitle: "Image Cropper",
                               )
                             ],
-                            sourcePath: img!.path,
+                            sourcePath: pickedImgBack!.path,
                             aspectRatio:
                                 const CropAspectRatio(ratioX: 20, ratioY: 13),
                             maxHeight: 600,
                             maxWidth: 600,
                             compressFormat: ImageCompressFormat.jpg,
                           );
-                          final temp = File(val!.path);
+                          final backtemp = File(croppedImgBack!.path);
                           setState(() {
-                            backImage = temp;
+                            backImage = backtemp;
                             log(backImage.toString());
                           });
                         }),
@@ -143,23 +145,42 @@ class _UploadImagePageState extends State<UploadImagePage> {
             ElevatedButton(
                 onPressed: () async {
                   final storage = FirebaseStorage.instance;
-                  final res = await FilePicker.platform.pickFiles(
-                      allowMultiple: false,
-                      type: FileType.custom,
-                      allowedExtensions: ['png', 'jpg']);
+                  // final res = await FilePicker.platform.pickFiles(
+                  //     allowMultiple: false,
+                  //     type: FileType.custom,
+                  //     allowedExtensions: ['png', 'jpg']);
 
-                  if (res == null) return;
+                  // final res = await FilePicker.platform.pickFiles(
+                  //     allowMultiple: false,
+                  //     type: FileType.custom,
+                  //     allowedExtensions: ['png', 'jpg']);
 
-                  final path = res.files.single.path!;
+                  final frontImg = frontImage;
+                  final backImg = backImage;
 
-                  final fileName = res.files.single.name;
-                  final file = File(path);
-                  final ref = storage.ref("image/$fileName");
-                  final url = ref.putFile(file);
-                  final u = await url.snapshot.ref.getDownloadURL();
+                  // if (res == null) return;
+                  if (frontImg == null && backImg == null) return;
+                  final frontPath = frontImg.files.single.path;
+                  final frontfileName = frontImg.files.single.name;
+                  final frontfile = File(path);
+                  final frontref = storage.ref("image/$frontfileName");
+                  final fronturl = ref.putFile(frontfile);
+                  final fronturlsnap =
+                      await fronturl.snapshot.ref.getDownloadURL();
                   setState(() {
-                    imgUrl = u;
+                    frontimgUrl = fronturlsnap;
                   });
+
+                  // final path = res.files.single.path!;
+
+                  // final fileName = res.files.single.name;
+                  // final file = File(path);
+                  // final ref = storage.ref("image/$fileName");
+                  // final url = ref.putFile(file);
+                  // final u = await url.snapshot.ref.getDownloadURL();
+                  // setState(() {
+                  //   imgUrl = u;
+                  // });
                 },
                 child: const Text("UPLOAD")),
             // buildUploadButton(
