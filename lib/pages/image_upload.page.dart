@@ -1,6 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:file_picker/file_picker.dart';
+
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +19,7 @@ class UploadImagePage extends StatefulWidget {
 class _UploadImagePageState extends State<UploadImagePage> {
   final ImagePicker picker = ImagePicker();
   File? frontImage;
+  String imgUrl = '';
 
   Future uploadFrontImage() async {}
 
@@ -136,42 +140,64 @@ class _UploadImagePageState extends State<UploadImagePage> {
                       ),
               ],
             ),
-            buildUploadButton(
-                icon: Icons.upload_file,
-                title: 'Upload Files',
-                onClicked: () {
-                  const path = "file/Aadhaar-Front.jpg";
-                  final fileName = File(frontImage!.path);
-                  storage.uploadFile(path, fileName).then((value) => log(path));
-                }),
+            ElevatedButton(
+                onPressed: () async {
+                  final storage = FirebaseStorage.instance;
+                  final res = await FilePicker.platform.pickFiles(
+                      allowMultiple: false,
+                      type: FileType.custom,
+                      allowedExtensions: ['png', 'jpg']);
+
+                  if (res == null) return;
+
+                  final path = res.files.single.path!;
+
+                  final fileName = res.files.single.name;
+                  final file = File(path);
+                  final ref = storage.ref("image/$fileName");
+                  final url = ref.putFile(file);
+                  final u = await url.snapshot.ref.getDownloadURL();
+                  setState(() {
+                    imgUrl = u;
+                  });
+                },
+                child: const Text("UPLOAD")),
+            // buildUploadButton(
+            //     icon: Icons.upload_file,
+            //     title: 'Upload Files',
+            //     onClicked: () {
+            //       const path = "file/Aadhaar-Front.jpg";
+            //       final fileName = File(frontImage!.path);
+            //       storage.uploadFile(path, fileName).then((value) => log(path));
+            //     }),
           ],
         ),
       ),
     );
   }
 
-  buildUploadButton(
-      {required IconData icon,
-      required String title,
-      required Null Function() onClicked}) {
-    {
-      return ElevatedButton(
-          style: ElevatedButton.styleFrom(primary: Colors.blue),
-          onPressed: onClicked,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: 60,
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Text(title)
-            ],
-          ));
-    }
-  }
+  // buildUploadButton(
+  //     {required IconData icon,
+  //     required String title,
+  //     required Null Function() onClicked}) {
+  //   {
+  //     return ElevatedButton(
+  //         style: ElevatedButton.styleFrom(primary: Colors.blue),
+  //         onPressed: onClicked,
+  //         child: Row(
+  //           mainAxisSize: MainAxisSize.min,
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             Icon(
+  //               icon,
+  //               size: 60,
+  //             ),
+  //             const SizedBox(
+  //               width: 16,
+  //             ),
+  //             Text(title)
+  //           ],
+  //         ));
+  //   }
+  // }
 }
