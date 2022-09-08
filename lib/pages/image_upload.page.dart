@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:qrscanner/storage_service.dart';
 
 class UploadImagePage extends StatefulWidget {
   const UploadImagePage({Key? key}) : super(key: key);
@@ -17,6 +18,8 @@ class _UploadImagePageState extends State<UploadImagePage> {
   File? frontImage;
   String? frontImagePath;
   String? backImagePath;
+  String? frontImageName;
+  String? backImageName;
 
   Future uploadFrontImage() async {}
 
@@ -53,6 +56,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                         onTap: (() async {
                           var pickedImgFront = await picker.pickImage(
                               source: ImageSource.gallery);
+                          if (pickedImgFront == null) return;
 
                           CroppedFile? croppedImgFront =
                               await ImageCropper().cropImage(
@@ -62,17 +66,19 @@ class _UploadImagePageState extends State<UploadImagePage> {
                                 toolbarTitle: "Image Cropper",
                               )
                             ],
-                            sourcePath: pickedImgFront!.path,
+                            sourcePath: pickedImgFront.path,
                             aspectRatio:
                                 const CropAspectRatio(ratioX: 20, ratioY: 13),
                             maxHeight: 600,
                             maxWidth: 600,
                             compressFormat: ImageCompressFormat.jpg,
                           );
-                          final fronttemp = File(croppedImgFront!.path);
+                          if (croppedImgFront == null) return;
+                          final frontPathtemp = File(croppedImgFront.path);
+
                           setState(() {
-                            frontImage = fronttemp;
-                            log(frontImage.toString());
+                            frontImagePath = frontPathtemp.path;
+                            frontImageName = pickedImgFront.name;
                           });
                         }),
                         child: Container(
@@ -141,7 +147,11 @@ class _UploadImagePageState extends State<UploadImagePage> {
                       ),
               ],
             ),
-            ElevatedButton(onPressed: () async {}, child: const Text("UPLOAD")),
+            ElevatedButton(
+                onPressed: () {
+                  Storage().uploadFile(frontImagePath!, frontImageName);
+                },
+                child: const Text("UPLOAD")),
           ],
         ),
       ),
