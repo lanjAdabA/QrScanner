@@ -87,8 +87,8 @@ class _UploadImagePageState extends State<UploadImagePage> {
                           final frontPathtemp = File(croppedImgFront.path);
 
                           setState(() {
-                            frontImagePath = frontPathtemp.path;
-                            frontImageName = pickedImgFront.name;
+                            frontImage = frontPathtemp;
+                            // frontImageName = pickedImgFront.name;
                           });
                         }),
                         child: Container(
