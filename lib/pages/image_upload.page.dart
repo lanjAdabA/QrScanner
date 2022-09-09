@@ -88,7 +88,6 @@ class _UploadImagePageState extends State<UploadImagePage> {
 
                           setState(() {
                             frontImage = frontPathtemp;
-                            // frontImageName = pickedImgFront.name;
                           });
                         }),
                         child: Container(
@@ -178,8 +177,8 @@ class _UploadImagePageState extends State<UploadImagePage> {
                     });
 
                     storage
-                        .uploadFile(frontImagePath, frontImageName,
-                            backImagePath, backImageName, name)
+                        .uploadFile(frontImage!, frontImageName, backImage!,
+                            backImageName, name)
                         .then((value) async {
                       setState(() {
                         isLoading = false;
@@ -233,7 +232,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                               "Upload File",
                               style:
                                   TextStyle(fontSize: 18, color: Colors.white),
-                            ),
+                            )
                           ],
                         )),
             )
