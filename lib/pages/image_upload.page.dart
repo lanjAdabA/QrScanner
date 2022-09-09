@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qrscanner/storage_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../localstorage.dart';
 
@@ -17,6 +18,7 @@ class UploadImagePage extends StatefulWidget {
 }
 
 class _UploadImagePageState extends State<UploadImagePage> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final ImagePicker picker = ImagePicker();
   File? frontImage;
   String fullname = '';
@@ -66,6 +68,8 @@ class _UploadImagePageState extends State<UploadImagePage> {
                         onTap: (() async {
                           var pickedImgFront = await picker.pickImage(
                               source: ImageSource.gallery);
+
+                          final SharedPreferences prefs = await _prefs;
                           if (pickedImgFront == null) return;
 
                           CroppedFile? croppedImgFront =
@@ -89,6 +93,8 @@ class _UploadImagePageState extends State<UploadImagePage> {
                           setState(() {
                             frontImage = frontPathtemp;
                           });
+                          prefs.setString(
+                              'frontImagePath', croppedImgFront.path);
                         }),
                         child: Container(
                             decoration: BoxDecoration(
@@ -118,6 +124,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                         onTap: (() async {
                           var pickedImgBack = await picker.pickImage(
                               source: ImageSource.gallery);
+                          final SharedPreferences prefs = await _prefs;
                           if (pickedImgBack == null) return;
 
                           CroppedFile? croppedImgBack =
@@ -141,6 +148,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                             backImage = backtemp;
                             log(backImage.toString());
                           });
+                          prefs.setString('backImagePath', croppedImgBack.path);
                         }),
                         child: Container(
                             decoration: BoxDecoration(
@@ -165,6 +173,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                     elevation: 5,
                   ),
                   onPressed: () async {
+                    log('Upload Button Pressed');
                     setState(() {
                       isLoading = true;
                       btncolor = const Color.fromARGB(255, 62, 185, 66);
@@ -174,12 +183,19 @@ class _UploadImagePageState extends State<UploadImagePage> {
                     setState(() {
                       frontImagePath = front;
                       backImagePath = back;
+                      log(frontImagePath);
+                      log(backImagePath);
                     });
 
                     storage
-                        .uploadFile(frontImage!, frontImageName, backImage!,
-                            backImageName, name)
+                        .uploadFile(
+                            frontImage: File(frontImagePath),
+                            frontImageName: 'Front',
+                            backImage: File(backImagePath),
+                            backImageName: 'Back',
+                            name: name)
                         .then((value) async {
+                      log('Uploaded Successfully');
                       setState(() {
                         isLoading = false;
                         btncolor = const Color.fromARGB(255, 29, 76, 194);

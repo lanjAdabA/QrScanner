@@ -54,22 +54,16 @@ class _CreateIdFolderPageState extends State<CreateIdFolderPage> {
                                           MediaQuery.of(context).size.height /
                                               25,
                                     ),
-                                    Stack(
-                                      alignment: Alignment.bottomRight,
-                                      clipBehavior: Clip.none,
-                                      children: const [
-                                        Opacity(
-                                          opacity: .9,
-                                          child: Positioned(
-                                            bottom: -59,
-                                            child: Icon(
-                                              Icons.photo_camera_back_outlined,
-                                              size: 68,
-                                              color: Colors.blueGrey,
-                                            ),
-                                          ),
-                                        )
-                                      ],
+                                    const Opacity(
+                                      opacity: .9,
+                                      child: Positioned(
+                                        bottom: -59,
+                                        child: Icon(
+                                          Icons.photo_camera_back_outlined,
+                                          size: 68,
+                                          color: Colors.blueGrey,
+                                        ),
+                                      ),
                                     )
                                   ],
                                 ),
