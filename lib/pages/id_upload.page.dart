@@ -13,7 +13,7 @@ class _CreateIdFolderPageState extends State<CreateIdFolderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       appBar: AppBar(
         title: const Text("creating folder"),
         centerTitle: true,
@@ -22,6 +22,7 @@ class _CreateIdFolderPageState extends State<CreateIdFolderPage> {
         padding: const EdgeInsets.all(20),
         color: Colors.purple[50],
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
