@@ -1,10 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:flutter_dropdown_alert/alert_controller.dart';
+import 'package:flutter_dropdown_alert/model/data_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qrscanner/storage_service.dart';
+
+import '../localstorage.dart';
 
 class UploadImagePage extends StatefulWidget {
   const UploadImagePage({Key? key}) : super(key: key);
@@ -16,10 +19,17 @@ class UploadImagePage extends StatefulWidget {
 class _UploadImagePageState extends State<UploadImagePage> {
   final ImagePicker picker = ImagePicker();
   File? frontImage;
-  String? frontImagePath;
-  String? backImagePath;
-  String? frontImageName;
-  String? backImageName;
+  String fullname = '';
+  final Storage storage = Storage();
+
+  String frontImagePath = "";
+  String backImagePath = "";
+  String frontImageName = "";
+  String backImageName = "";
+  bool isLoading = false;
+  Color btncolor = const Color.fromARGB(255, 29, 76, 194);
+
+  String name = "";
 
   Future uploadFrontImage() async {}
 
@@ -147,11 +157,86 @@ class _UploadImagePageState extends State<UploadImagePage> {
                       ),
               ],
             ),
-            ElevatedButton(
-                onPressed: () {
-                  Storage().uploadFile(frontImagePath!, frontImageName);
-                },
-                child: const Text("UPLOAD")),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: btncolor,
+                    minimumSize: const Size.fromHeight(40),
+                    elevation: 5,
+                  ),
+                  onPressed: () async {
+                    setState(() {
+                      isLoading = true;
+                      btncolor = const Color.fromARGB(255, 62, 185, 66);
+                    });
+                    var front = await DiskRepo().retrieve1();
+                    var back = await DiskRepo().retrieve2();
+                    setState(() {
+                      frontImagePath = front;
+                      backImagePath = back;
+                    });
+
+                    storage
+                        .uploadFile(frontImagePath, frontImageName,
+                            backImagePath, backImageName, name)
+                        .then((value) async {
+                      setState(() {
+                        isLoading = false;
+                        btncolor = const Color.fromARGB(255, 29, 76, 194);
+                      });
+                      // _displaySuccessMotionToast();
+                      AlertController.show(
+                        " Done Uploaded",
+                        "Successfully!",
+                        TypeAlert.success,
+                      );
+                      log('Done Upload');
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => super.widget));
+                    }).onError((error, stackTrace) {
+                      setState(() {
+                        isLoading = false;
+                        btncolor = const Color.fromARGB(255, 29, 76, 194);
+                      });
+                      return AlertController.show(
+                        " No File Found",
+                        "Select the file first!",
+                        TypeAlert.error,
+                      );
+                    });
+                  },
+                  child: isLoading
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text(
+                              'Uploading...',
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            Icon(Icons.cloud_upload_outlined, size: 28),
+                            SizedBox(width: 16),
+                            Text(
+                              "Upload File",
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white),
+                            ),
+                          ],
+                        )),
+            )
           ],
         ),
       ),
