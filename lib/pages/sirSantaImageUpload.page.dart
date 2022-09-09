@@ -80,3 +80,21 @@
 //     );
 //   }
 // }
+
+
+//todo class Storage {
+//todo   final firebase_storage.FirebaseStorage storage =
+//todo       firebase_storage.FirebaseStorage.instance;
+
+//todo   Future uploadFile(String filePath, fileName) async {
+//todo     File file = File(filePath);
+
+//todo     try {
+//todo       await storage.ref("test/$fileName").putFile(file);
+//todo     } on firebase_core.FirebaseException catch (e) {
+//todo       print(e);
+//todo     }
+//todo   }
+//todo }
+
+

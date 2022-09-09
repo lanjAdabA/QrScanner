@@ -157,8 +157,8 @@ class _AadhaarScannerPageState extends State<AadhaarScannerPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: width / 2.7,
-                        width: width / 2.7,
+                        height: width / 3,
+                        width: width / 3,
                         child: Animator<double>(
                           duration: const Duration(milliseconds: 1000),
                           cycles: 0,

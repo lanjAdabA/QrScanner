@@ -39,8 +39,8 @@ class Storage {
     //   contentType: 'text/html',
     // );
     try {
-      await storage.ref('Aadhaar/$name/$frontImageName').putFile(file1);
-      await storage.ref('Aadhaar/$name/$backImageName').putFile(file2);
+      await storage.ref('Aadhaar/$frontImageName').putFile(file1);
+      await storage.ref('Aadhaar/$backImageName').putFile(file2);
       // await storage.ref('Aadhaar/$name').putFile(file1, newCustomMetadata);
     } on firebase_core.FirebaseException catch (e) {
       print(e);
