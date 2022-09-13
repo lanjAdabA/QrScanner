@@ -23,27 +23,7 @@ class _HomePageState extends State<HomePage> {
               icon: const Icon(Icons.login),
               onPressed: () {
                 const LogInWidget();
-              }
-              //  {
-              //   StreamBuilder<User?>(
-              //     stream: FirebaseAuth.instance.authStateChanges(),
-              //     builder: (context, snapshot) {
-              //       if (snapshot.hasData) {
-              //         return const HomePage();
-              //       } else {
-              //         return const SignInPage();
-
-              //         //     IconButton(
-              //         //   icon: const Icon(Icons.login),
-              //         //   onPressed: () {
-              //         //     context.router.push(const SignInRoute());
-              //         //   },
-              //         // );
-              //       }
-              //     },
-              //   );
-              // },
-              )
+              })
         ],
       ),
       body: Container(
@@ -61,14 +41,15 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Icon(
                       Icons.qr_code,
-                      size: MediaQuery.of(context).size.width / 3,
+                      color: Colors.blueGrey,
+                      size: MediaQuery.of(context).size.width / 3.2,
                     ),
                     Text(
                       "Create custom QR",
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width * .048,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent),
+                          color: Colors.blueGrey),
                     )
                   ],
                 ),
@@ -82,14 +63,14 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Icon(
                       Icons.qr_code_scanner,
-                      size: MediaQuery.of(context).size.width / 3,
+                      size: MediaQuery.of(context).size.width / 3.2,
                     ),
                     Text(
                       "QR Code Scanner",
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width * .048,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent),
+                          color: Colors.black),
                     )
                   ],
                 ),
@@ -103,14 +84,36 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Icon(
                       Icons.qr_code_2,
-                      size: MediaQuery.of(context).size.width / 3,
+                      size: MediaQuery.of(context).size.width / 3.2,
                     ),
                     Text(
                       "Aadhaar Scanner",
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width * .048,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent),
+                          color: Colors.black),
+                    )
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  context.router.push(const MyWalletRoute());
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.wallet_sharp,
+                      color: Colors.brown,
+                      size: MediaQuery.of(context).size.width / 3.2,
+                    ),
+                    Text(
+                      "My Docs Wallet",
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width * .048,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.brown),
                     )
                   ],
                 ),
@@ -123,15 +126,16 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.upload_file,
-                      size: MediaQuery.of(context).size.width / 3,
+                      Icons.upload_file_sharp,
+                      color: Colors.blue,
+                      size: MediaQuery.of(context).size.width / 3.2,
                     ),
                     Text(
                       "Upload more IDs",
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width * .048,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent),
+                          color: Colors.blue),
                     )
                   ],
                 ),

@@ -29,7 +29,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
   String frontImageName = "";
   String backImageName = "";
   bool isLoading = false;
-  Color btncolor = const Color.fromARGB(255, 29, 76, 194);
+  Color btncolor = Colors.deepPurple;
 
   String name = "";
 
@@ -190,15 +190,15 @@ class _UploadImagePageState extends State<UploadImagePage> {
                     storage
                         .uploadFile(
                             frontImage: File(frontImagePath),
-                            frontImageName: 'Front',
+                            frontImageName: 'Front Image',
                             backImage: File(backImagePath),
-                            backImageName: 'Back',
+                            backImageName: 'Rear Image Page',
                             name: name)
                         .then((value) async {
                       log('Uploaded Successfully');
                       setState(() {
                         isLoading = false;
-                        btncolor = const Color.fromARGB(255, 29, 76, 194);
+                        btncolor = Colors.amber;
                       });
                       // _displaySuccessMotionToast();
                       AlertController.show(
@@ -214,7 +214,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                     }).onError((error, stackTrace) {
                       setState(() {
                         isLoading = false;
-                        btncolor = const Color.fromARGB(255, 29, 76, 194);
+                        btncolor = Colors.pink;
                       });
                       return AlertController.show(
                         " No File Found",

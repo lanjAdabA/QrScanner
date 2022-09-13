@@ -182,16 +182,16 @@ class _UploadImagePageState extends State<UploadCameraPage> {
                         storage
                             .uploadFile(
                                 frontImage: File(frontImagePath),
-                                frontImageName: 'Front',
+                                frontImageName: 'Front Image',
                                 backImage: File(backImagePath),
-                                backImageName: 'Back',
+                                backImageName: 'Rear Image',
                                 name: name)
                             .then((value) async {
                           log('Uploaded Successfully');
 
                           setState(() {
                             isLoading = false;
-                            btncolor = const Color.fromARGB(255, 29, 76, 194);
+                            btncolor = Colors.green;
                           });
                           // _displaySuccessMotionToast();
                           AlertController.show(
@@ -208,7 +208,7 @@ class _UploadImagePageState extends State<UploadCameraPage> {
                         }).onError((error, stackTrace) {
                           setState(() {
                             isLoading = false;
-                            btncolor = const Color.fromARGB(255, 29, 76, 194);
+                            btncolor = Colors.red;
                           });
                           return AlertController.show(
                             " No File Found",
@@ -250,34 +250,3 @@ class _UploadImagePageState extends State<UploadCameraPage> {
             )));
   }
 }
-
-//   buildUploadButton(
-//       {required IconData icon,
-//       required String title,
-//       required Null Function() onClicked}) {
-//     {
-//       return ElevatedButton(
-//           style: ElevatedButton.styleFrom(primary: Colors.blue),
-//           onPressed: onClicked,
-//           child: Row(
-//             mainAxisSize: MainAxisSize.min,
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               Icon(
-//                 icon,
-//                 size: 60,
-//               ),
-//               const SizedBox(
-//                 width: 16,
-//               ),
-//               Text(title)
-//             ],
-//           ));
-//     }
-//   }
-// }
-
-
-
-
-// 

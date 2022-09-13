@@ -26,7 +26,7 @@ class _CreateIdFolderPageState extends State<CreateIdFolderPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 FloatingActionButton.extended(
                   label: const Text("Create new"),
@@ -87,16 +87,19 @@ class _CreateIdFolderPageState extends State<CreateIdFolderPage> {
                                         }),
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 30,
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height / 50,
                                 ),
                               ],
                             ),
                           );
                         }));
                   },
-                  // child: const Icon(Icons.add)
                 ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 10,
+                )
               ],
             )
           ],

@@ -1,3 +1,4 @@
+import 'package:animator/animator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -38,7 +39,7 @@ class _QrScannerPageState extends State<QrScannerPage> {
 
   @override
   Widget build(BuildContext context) {
-    // double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -74,12 +75,22 @@ class _QrScannerPageState extends State<QrScannerPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            Icons.qr_code_scanner,
-                            size: MediaQuery.of(context).size.width / 6,
+                          SizedBox(
+                            height: width / 3,
+                            width: width / 3,
+                            child: Animator<double>(
+                              duration: const Duration(milliseconds: 1000),
+                              cycles: 0,
+                              curve: Curves.easeInOutCirc,
+                              tween: Tween<double>(begin: 20.0, end: 25.0),
+                              builder: (context, animatorState, child) => Icon(
+                                Icons.qr_code_scanner,
+                                size: animatorState.value * 5,
+                              ),
+                            ),
                           ),
                           Text(
-                            "Open Scanner ",
+                            "Open QR Scanner",
                             style: TextStyle(
                                 fontSize:
                                     MediaQuery.of(context).size.width * .048,
@@ -88,6 +99,24 @@ class _QrScannerPageState extends State<QrScannerPage> {
                           )
                         ],
                       ),
+
+                      // Column(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Icon(
+                      //       Icons.qr_code_scanner,
+                      //       size: MediaQuery.of(context).size.width / 6,
+                      //     ),
+                      //     Text(
+                      //       "Open Scanner ",
+                      //       style: TextStyle(
+                      //           fontSize:
+                      //               MediaQuery.of(context).size.width * .048,
+                      //           fontWeight: FontWeight.bold,
+                      //           color: Colors.blueAccent),
+                      //     )
+                      //   ],
+                      // ),
                     ),
                   ],
                 ),

@@ -27,7 +27,7 @@ class _AadhaarScannerPageState extends State<AadhaarScannerPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Aadhaa Qr code scanner'),
+        title: const Text('Aadhaar Qr code scanner'),
         centerTitle: true,
       ),
       body: Container(
@@ -171,7 +171,7 @@ class _AadhaarScannerPageState extends State<AadhaarScannerPage> {
                         ),
                       ),
                       Text(
-                        "Open Scanner ",
+                        "Tap to Scan",
                         style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * .048,
                             fontWeight: FontWeight.bold,

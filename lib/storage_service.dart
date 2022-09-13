@@ -14,10 +14,8 @@ class Storage {
     required String name,
   }) async {
     try {
-      await storage
-          .ref('Document Name/$name/$frontImageName')
-          .putFile(frontImage);
-      await storage.ref('Document/$name/$backImageName').putFile(backImage);
+      await storage.ref('Aadhaar/$name/$frontImageName').putFile(frontImage);
+      await storage.ref('Aadhaar/$name/$backImageName').putFile(backImage);
     } on firebase_core.FirebaseException catch (e) {
       print(e);
     }
