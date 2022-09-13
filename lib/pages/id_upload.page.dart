@@ -1,6 +1,8 @@
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:qrscanner/router/router.gr.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateIdFolderPage extends StatefulWidget {
   const CreateIdFolderPage({Key? key}) : super(key: key);
@@ -10,6 +12,14 @@ class CreateIdFolderPage extends StatefulWidget {
 }
 
 class _CreateIdFolderPageState extends State<CreateIdFolderPage> {
+
+   clear() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('frontImagePath') && prefs.containsKey('backImagePath')) {
+      prefs.remove('frontImagePath');
+      prefs.remove('backImagePath');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,6 +85,7 @@ class _CreateIdFolderPageState extends State<CreateIdFolderPage> {
                                         icon: Icons.image_outlined,
                                         title: 'Open Gallery',
                                         onClicked: () {
+                                   clear();
                                           context.router
                                               .push(const UploadImageRoute());
                                         }),

@@ -29,13 +29,26 @@ class _UploadImagePageState extends State<UploadImagePage> {
   String frontImageName = "";
   String backImageName = "";
   bool isLoading = false;
-  Color btncolor = Colors.deepPurple;
+  Color btncolor = const Color.fromARGB(255, 29, 76, 194);
 
   String name = "";
 
   Future uploadFrontImage() async {}
 
   File? backImage;
+   @override
+  void initState() {
+    super.initState;
+
+  }
+clear() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('frontImagePath') && prefs.containsKey('backImagePath')) {
+      prefs.remove('frontImagePath');
+      prefs.remove('backImagePath');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +79,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                       )
                     : GestureDetector(
                         onTap: (() async {
+                          clear();
                           var pickedImgFront = await picker.pickImage(
                               source: ImageSource.gallery);
 
@@ -92,6 +106,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
 
                           setState(() {
                             frontImage = frontPathtemp;
+                            log('Front adhar${frontImage.toString()}');
                           });
                           prefs.setString(
                               'frontImagePath', croppedImgFront.path);
@@ -146,7 +161,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                           final backtemp = File(croppedImgBack.path);
                           setState(() {
                             backImage = backtemp;
-                            log(backImage.toString());
+                            log('back adhar${backImage.toString()}');
                           });
                           prefs.setString('backImagePath', croppedImgBack.path);
                         }),
@@ -181,24 +196,23 @@ class _UploadImagePageState extends State<UploadImagePage> {
                     var front = await DiskRepo().retrieve1();
                     var back = await DiskRepo().retrieve2();
                     setState(() {
+                     
                       frontImagePath = front;
                       backImagePath = back;
-                      log(frontImagePath);
-                      log(backImagePath);
+                      log('front$frontImagePath');
+                      log('back$backImagePath');
                     });
-
-                    storage
-                        .uploadFile(
-                            frontImage: File(frontImagePath),
+                  
+                    storage.uploadFile(                                                                 
+                            frontImage: frontImagePath,
                             frontImageName: 'Front Image',
-                            backImage: File(backImagePath),
+                            backImage: backImagePath,
                             backImageName: 'Rear Image',
-                            name: name)
-                        .then((value) async {
-                      log('Uploaded Successfully');
+                            name: name).then((value) async{
+                              log('Uploaded Successfully');
                       setState(() {
                         isLoading = false;
-                        btncolor = Colors.amber;
+                       btncolor = const Color.fromARGB(255, 29, 76, 194);
                       });
                       // _displaySuccessMotionToast();
                       AlertController.show(
@@ -211,7 +225,12 @@ class _UploadImagePageState extends State<UploadImagePage> {
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) => super.widget));
+                           
+                      
+                          
+                     
                     }).onError((error, stackTrace) {
+                      log('error');
                       setState(() {
                         isLoading = false;
                         btncolor = Colors.pink;

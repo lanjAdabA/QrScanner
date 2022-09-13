@@ -181,9 +181,9 @@ class _UploadImagePageState extends State<UploadCameraPage> {
 
                         storage
                             .uploadFile(
-                                frontImage: File(frontImagePath),
+                                frontImage: frontImagePath,
                                 frontImageName: 'Front Image',
-                                backImage: File(backImagePath),
+                                backImage: backImagePath,
                                 backImageName: 'Rear Image',
                                 name: name)
                             .then((value) async {
