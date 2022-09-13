@@ -192,7 +192,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                             frontImage: File(frontImagePath),
                             frontImageName: 'Front Image',
                             backImage: File(backImagePath),
-                            backImageName: 'Rear Image Page',
+                            backImageName: 'Rear Image',
                             name: name)
                         .then((value) async {
                       log('Uploaded Successfully');
