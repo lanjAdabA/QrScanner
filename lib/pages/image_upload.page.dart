@@ -2,13 +2,14 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_dropdown_alert/alert_controller.dart';
 import 'package:flutter_dropdown_alert/model/data_alert.dart';
+
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:qrscanner/localstorage.dart';
 import 'package:qrscanner/storage_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../localstorage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UploadImagePage extends StatefulWidget {
   const UploadImagePage({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final ImagePicker picker = ImagePicker();
   File? frontImage;
-  String fullname = '';
+  // String fullname = '';
   final Storage storage = Storage();
 
   String frontImagePath = "";
@@ -29,26 +30,27 @@ class _UploadImagePageState extends State<UploadImagePage> {
   String frontImageName = "";
   String backImageName = "";
   bool isLoading = false;
-  Color btncolor = const Color.fromARGB(255, 29, 76, 194);
+  Color btncolor = Colors.deepPurple;
 
   String name = "";
 
-  Future uploadFrontImage() async {}
+  // Future uploadFrontImage() async {}
 
   File? backImage;
-   @override
+  @override
   void initState() {
     super.initState;
-
+    clear();
   }
-clear() async {
+
+  clear() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('frontImagePath') && prefs.containsKey('backImagePath')) {
+    if (prefs.containsKey('frontImagePath') &&
+        prefs.containsKey('backImagePath')) {
       prefs.remove('frontImagePath');
       prefs.remove('backImagePath');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -196,23 +198,24 @@ clear() async {
                     var front = await DiskRepo().retrieve1();
                     var back = await DiskRepo().retrieve2();
                     setState(() {
-                     
                       frontImagePath = front;
                       backImagePath = back;
                       log('front$frontImagePath');
                       log('back$backImagePath');
                     });
-                  
-                    storage.uploadFile(                                                                 
+
+                    storage
+                        .uploadFile(
                             frontImage: frontImagePath,
                             frontImageName: 'Front Image',
                             backImage: backImagePath,
                             backImageName: 'Rear Image',
-                            name: name).then((value) async{
-                              log('Uploaded Successfully');
+                            name: name)
+                        .then((value) async {
+                      log('Uploaded Successfully');
                       setState(() {
                         isLoading = false;
-                       btncolor = const Color.fromARGB(255, 29, 76, 194);
+                        btncolor = const Color.fromARGB(255, 29, 76, 194);
                       });
                       // _displaySuccessMotionToast();
                       AlertController.show(
@@ -225,15 +228,11 @@ clear() async {
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) => super.widget));
-                           
-                      
-                          
-                     
                     }).onError((error, stackTrace) {
                       log('error');
                       setState(() {
                         isLoading = false;
-                        btncolor = Colors.pink;
+                        btncolor = Colors.red;
                       });
                       return AlertController.show(
                         " No File Found",

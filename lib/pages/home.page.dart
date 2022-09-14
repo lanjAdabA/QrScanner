@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Icon(
                       Icons.qr_code,
-                      color: Colors.blueGrey,
+                      color: Colors.black,
                       size: MediaQuery.of(context).size.width / 3.2,
                     ),
                     Text(
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width * .048,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueGrey),
+                          color: Colors.black),
                     )
                   ],
                 ),
@@ -104,8 +104,8 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.wallet_sharp,
-                      color: Colors.brown,
+                      Icons.wallet_outlined,
+                      color: Colors.grey[800],
                       size: MediaQuery.of(context).size.width / 3.2,
                     ),
                     Text(
@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width * .048,
                           fontWeight: FontWeight.bold,
-                          color: Colors.brown),
+                          color: Colors.grey[800]),
                     )
                   ],
                 ),
@@ -126,8 +126,8 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.upload_file_sharp,
-                      color: Colors.blue,
+                      Icons.upload_file_outlined,
+                      color: Colors.grey[800],
                       size: MediaQuery.of(context).size.width / 3.2,
                     ),
                     Text(
@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width * .048,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue),
+                          color: Colors.grey[800]),
                     )
                   ],
                 ),
