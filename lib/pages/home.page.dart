@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Icon(
                       Icons.qr_code,
-                      color: Colors.black,
+                      color: Colors.blueGrey,
                       size: MediaQuery.of(context).size.width / 3.2,
                     ),
                     Text(
@@ -49,10 +49,15 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width * .048,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black),
+                          color: Colors.blueGrey),
                     )
                   ],
                 ),
+              ),
+              const Divider(
+                indent: 26,
+                color: Colors.deepPurple,
+                endIndent: 26,
               ),
               GestureDetector(
                 onTap: () {
@@ -95,6 +100,11 @@ class _HomePageState extends State<HomePage> {
                     )
                   ],
                 ),
+              ),
+              const Divider(
+                color: Colors.deepPurple,
+                indent: 26,
+                endIndent: 26,
               ),
               GestureDetector(
                 onTap: () {
