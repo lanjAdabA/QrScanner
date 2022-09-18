@@ -25,7 +25,6 @@ class _QrScannerPageState extends State<QrScannerPage> {
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.QR);
-      // print(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
@@ -60,7 +59,6 @@ class _QrScannerPageState extends State<QrScannerPage> {
                           border: Border.all(color: Colors.black),
                           borderRadius: BorderRadius.circular(10)),
                       padding: const EdgeInsets.all(20),
-                      // color: Colors.purple[100],
                       child: Text('Scan result : $_scanBarcode\n',
                           style: const TextStyle(fontSize: 20)),
                     ),
@@ -99,24 +97,6 @@ class _QrScannerPageState extends State<QrScannerPage> {
                           )
                         ],
                       ),
-
-                      // Column(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [
-                      //     Icon(
-                      //       Icons.qr_code_scanner,
-                      //       size: MediaQuery.of(context).size.width / 6,
-                      //     ),
-                      //     Text(
-                      //       "Open Scanner ",
-                      //       style: TextStyle(
-                      //           fontSize:
-                      //               MediaQuery.of(context).size.width * .048,
-                      //           fontWeight: FontWeight.bold,
-                      //           color: Colors.blueAccent),
-                      //     )
-                      //   ],
-                      // ),
                     ),
                   ],
                 ),
