@@ -289,7 +289,8 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadImagePage extends StatefulWidget {
-  const UploadImagePage({Key? key}) : super(key: key);
+  final documentType;
+  const UploadImagePage(this.documentType);
 
   @override
   State<UploadImagePage> createState() => _UploadImagePageState();
@@ -298,6 +299,7 @@ class UploadImagePage extends StatefulWidget {
 class _UploadImagePageState extends State<UploadImagePage> {
   String? frontPath;
   String status = 'Upload';
+  TextEditingController documentFace = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -308,6 +310,13 @@ class _UploadImagePageState extends State<UploadImagePage> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            TextFormField(
+              controller: documentFace,
+              decoration: const InputDecoration(
+                  hintText: "Front/Back Page",
+                  labelText: "Enter Page details",
+                  border: OutlineInputBorder()),
+            ),
             SizedBox(
               // height: MediaQuery.of(context).size.height * .8,
               width: MediaQuery.of(context).size.width * .8,
@@ -341,11 +350,39 @@ class _UploadImagePageState extends State<UploadImagePage> {
                         });
                       },
                       child: Image.asset("assets/sampleID.png"),
-
-                      // Image.network("assets/sampleID.png"),
                     )
-                  : Image.file(
-                      File(frontPath!),
+                  : InkWell(
+                      onTap: () async {
+                        status = 'Upload';
+                        final imgPicker = ImagePicker();
+                        var pickedImgFront = await imgPicker.pickImage(
+                            source: ImageSource.gallery);
+                        if (pickedImgFront == null) return;
+
+                        CroppedFile? croppedImgFront =
+                            await ImageCropper().cropImage(
+                          uiSettings: [
+                            AndroidUiSettings(
+                              toolbarColor: Colors.white,
+                              toolbarTitle: "Image Cropper",
+                            )
+                          ],
+                          sourcePath: pickedImgFront.path,
+                          aspectRatio:
+                              const CropAspectRatio(ratioX: 20, ratioY: 13),
+                          maxHeight: 600,
+                          maxWidth: 600,
+                          compressFormat: ImageCompressFormat.jpg,
+                        );
+                        if (croppedImgFront == null) return;
+                        final frontPathtemp = File(croppedImgFront.path);
+                        setState(() {
+                          frontPath = pickedImgFront.path;
+                        });
+                      },
+                      child: Image.file(
+                        File(frontPath!),
+                      ),
                     ),
             ),
             const SizedBox(
@@ -361,7 +398,9 @@ class _UploadImagePageState extends State<UploadImagePage> {
                               status = 'Uploading';
                             });
 
-                            final db = FirebaseStorage.instance.ref('aadhaar');
+                            final db = FirebaseStorage.instance.ref(
+                              '${widget.documentType}/${documentFace.value.text}/',
+                            );
                             db.putFile(File(frontPath!)).whenComplete(() {
                               setState(() {
                                 status = 'Uploaded';

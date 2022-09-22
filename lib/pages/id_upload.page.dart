@@ -1,4 +1,3 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:qrscanner/router/router.gr.dart';
@@ -12,14 +11,16 @@ class CreateIdFolderPage extends StatefulWidget {
 }
 
 class _CreateIdFolderPageState extends State<CreateIdFolderPage> {
-
-   clear() async {
+  clear() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('frontImagePath') && prefs.containsKey('backImagePath')) {
+    if (prefs.containsKey('frontImagePath') &&
+        prefs.containsKey('backImagePath')) {
       prefs.remove('frontImagePath');
       prefs.remove('backImagePath');
     }
   }
+
+  TextEditingController documenttype = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,11 +36,18 @@ class _CreateIdFolderPageState extends State<CreateIdFolderPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            TextFormField(
+              controller: documenttype,
+              decoration: const InputDecoration(
+                  hintText: "Document Name",
+                  labelText: "Enter document Name",
+                  border: OutlineInputBorder()),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 FloatingActionButton.extended(
-                  label: const Text("Create new"),
+                  label: const Text("create"),
                   icon: const Icon(Icons.add),
                   onPressed: () {
                     showModalBottomSheet(
@@ -85,9 +93,10 @@ class _CreateIdFolderPageState extends State<CreateIdFolderPage> {
                                         icon: Icons.image_outlined,
                                         title: 'Open Gallery',
                                         onClicked: () {
-                                   clear();
-                                          context.router
-                                              .push(const UploadImageRoute());
+                                          clear();
+                                          context.router.push(UploadImageRoute(
+                                              documentType:
+                                                  documenttype.value.text));
                                         }),
                                     buildButton(
                                         icon: Icons.camera_alt_outlined,

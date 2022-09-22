@@ -48,8 +48,9 @@ class AppRouter extends _i11.RootStackRouter {
           routeData: routeData, child: const _i4.AadhaarScannerPage());
     },
     UploadImageRoute.name: (routeData) {
+      final args = routeData.argsAs<UploadImageRouteArgs>();
       return _i11.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i5.UploadImagePage());
+          routeData: routeData, child: _i5.UploadImagePage(args.documentType));
     },
     UploadCameraRoute.name: (routeData) {
       return _i11.MaterialPageX<dynamic>(
@@ -69,7 +70,7 @@ class AppRouter extends _i11.RootStackRouter {
     },
     MyWalletRoute.name: (routeData) {
       return _i11.MaterialPageX<dynamic>(
-          routeData: routeData, child: _i10.MyWalletPage());
+          routeData: routeData, child: const _i10.MyWalletPage());
     }
   };
 
@@ -125,11 +126,24 @@ class AadhaarScannerRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.UploadImagePage]
-class UploadImageRoute extends _i11.PageRouteInfo<void> {
-  const UploadImageRoute()
-      : super(UploadImageRoute.name, path: '/upload-image-page');
+class UploadImageRoute extends _i11.PageRouteInfo<UploadImageRouteArgs> {
+  UploadImageRoute({required dynamic documentType})
+      : super(UploadImageRoute.name,
+            path: '/upload-image-page',
+            args: UploadImageRouteArgs(documentType: documentType));
 
   static const String name = 'UploadImageRoute';
+}
+
+class UploadImageRouteArgs {
+  const UploadImageRouteArgs({required this.documentType});
+
+  final dynamic documentType;
+
+  @override
+  String toString() {
+    return 'UploadImageRouteArgs{documentType: $documentType}';
+  }
 }
 
 /// generated route for

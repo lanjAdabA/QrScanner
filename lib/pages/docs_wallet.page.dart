@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+
 import 'package:carousel_slider/carousel_slider.dart';
 
 class MyWalletPage extends StatefulWidget {
@@ -14,7 +13,7 @@ class _MyWalletPageState extends State<MyWalletPage> {
   final List<Map<String, dynamic>> shapeData = [
     {
       'shapeName': "Aadhaar",
-      'shapeImg': 'assets/aadhaar.jpg',
+      'shapeImg': 'assets/ranAadhaar.jpg',
     },
     {
       'shapeName': "Driving Licence",
@@ -22,11 +21,11 @@ class _MyWalletPageState extends State<MyWalletPage> {
     },
     {
       'shapeName': "Pan Card",
-      'shapeImg': 'assets/pan_card.jpg',
+      'shapeImg': 'assets/ramPAN.jpg',
     },
     {
       'shapeName': "Voter Card",
-      'shapeImg': 'assets/voter.jpg',
+      'shapeImg': 'assets/ranVoter.jpg',
     },
     {
       'shapeName': "Add new",
@@ -50,7 +49,7 @@ class _MyWalletPageState extends State<MyWalletPage> {
           enlargeCenterPage: true,
           scrollDirection: Axis.vertical,
           enableInfiniteScroll: true,
-          viewportFraction: .5,
+          viewportFraction: .43,
           height: height * 1,
         ),
         items: shapeData.map((e) {

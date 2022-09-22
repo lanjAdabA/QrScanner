@@ -21,9 +21,9 @@ class Storage {
           .ref('Aadhaar/$name/$frontImageName')
           .putFile(frontImageName);
       var p = storage.ref('Aadhaar/$name/$backImageName');
-      var url = p.putFile(backImageName);
+      // var url = p.putFile(backImageName);
 
-      log("msg${url.snapshot.bytesTransferred}");
+      // log("msg${url.snapshot.bytesTransferred}");
     } on firebase_core.FirebaseException catch (e) {
       log(e.toString());
     }
