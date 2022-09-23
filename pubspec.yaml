@@ -50,6 +50,9 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   carousel_slider: ^4.1.1
   flutter_launcher_icons: ^0.10.0
+  firebase_database: ^9.1.4
+  permission_handler: ^10.0.0
+
 
 dev_dependencies:
   flutter_test:

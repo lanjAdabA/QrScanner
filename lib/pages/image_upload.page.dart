@@ -283,10 +283,13 @@
 
 import 'dart:io';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UploadImagePage extends StatefulWidget {
   final documentType;
@@ -295,123 +298,229 @@ class UploadImagePage extends StatefulWidget {
   @override
   State<UploadImagePage> createState() => _UploadImagePageState();
 }
-
+List<String> documentFace = <String>['Front','Back'];
 class _UploadImagePageState extends State<UploadImagePage> {
+
+  late DatabaseReference _dbref;
+
   String? frontPath;
   String status = 'Upload';
-  TextEditingController documentFace = TextEditingController();
+  String imageUrl = 'Upload';
+  String docFace = "Front";
+  String phoneNum = '';
 
+  TextEditingController documentType = TextEditingController();
+  var file;
+  uploadImage() async {
+    _dbref = FirebaseDatabase.instance.ref("documentkeeper"); //realtime DB instance
+    final _firebaseStorage = FirebaseStorage.instance; //Storage instance
+    final _imagePicker = ImagePicker();
+    PickedFile? image;
+    //Check Permissions
+    await Permission.photos.request();
+
+    var permissionStatus = await Permission.photos.status;
+
+    final prefs = await SharedPreferences.getInstance();
+    phoneNum = prefs.getString("PhoneNumber").toString();
+
+    if (permissionStatus.isGranted) {
+      //Select Image  .getImage(source: ImageSource.gallery);
+      // image = await _imagePicker.pickImage(source: source)
+      final XFile? image =
+      await _imagePicker.pickImage(source: ImageSource.gallery);
+       file = File(image!.path);
+
+      setState(() {
+        status = "Uploading...";
+      });
+      if (image != null) {
+        //Upload to Firebase
+        var snapshot =
+        await _firebaseStorage.ref().child('images/fgfg').putFile(file);
+        var downloadUrl = await snapshot.ref.getDownloadURL();
+        setState(() {
+          imageUrl = downloadUrl;
+          status = "Uploaded";
+
+          _dbref
+              .child("$phoneNum")
+              .child("data")
+              .child("${documentType.value.text}").child("$docFace")
+          .set(
+            {
+            "imgUrl" : "${imageUrl}",
+            }
+          );
+
+        });
+        print("DPWNNN $imageUrl");
+      } else {
+        print('No Image Path Received');
+      }
+    } else {
+      print('Permission not granted. Try Again with permission access');
+    }
+  }
+  String documentFaceList = documentFace.first;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Image Upload"),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
-              controller: documentFace,
-              decoration: const InputDecoration(
-                  hintText: "Front/Back Page",
-                  labelText: "Enter Page details",
-                  border: OutlineInputBorder()),
-            ),
-            SizedBox(
-              // height: MediaQuery.of(context).size.height * .8,
-              width: MediaQuery.of(context).size.width * .8,
-              child: frontPath == null
-                  ? InkWell(
-                      onTap: () async {
-                        final imgPicker = ImagePicker();
-                        var pickedImgFront = await imgPicker.pickImage(
-                            source: ImageSource.gallery);
-                        if (pickedImgFront == null) return;
-
-                        CroppedFile? croppedImgFront =
-                            await ImageCropper().cropImage(
-                          uiSettings: [
-                            AndroidUiSettings(
-                              toolbarColor: Colors.white,
-                              toolbarTitle: "Image Cropper",
-                            )
-                          ],
-                          sourcePath: pickedImgFront.path,
-                          aspectRatio:
-                              const CropAspectRatio(ratioX: 20, ratioY: 13),
-                          maxHeight: 600,
-                          maxWidth: 600,
-                          compressFormat: ImageCompressFormat.jpg,
-                        );
-                        if (croppedImgFront == null) return;
-                        final frontPathtemp = File(croppedImgFront.path);
-                        setState(() {
-                          frontPath = pickedImgFront.path;
-                        });
-                      },
-                      child: Image.asset("assets/sampleID.png"),
-                    )
-                  : InkWell(
-                      onTap: () async {
-                        status = 'Upload';
-                        final imgPicker = ImagePicker();
-                        var pickedImgFront = await imgPicker.pickImage(
-                            source: ImageSource.gallery);
-                        if (pickedImgFront == null) return;
-
-                        CroppedFile? croppedImgFront =
-                            await ImageCropper().cropImage(
-                          uiSettings: [
-                            AndroidUiSettings(
-                              toolbarColor: Colors.white,
-                              toolbarTitle: "Image Cropper",
-                            )
-                          ],
-                          sourcePath: pickedImgFront.path,
-                          aspectRatio:
-                              const CropAspectRatio(ratioX: 20, ratioY: 13),
-                          maxHeight: 600,
-                          maxWidth: 600,
-                          compressFormat: ImageCompressFormat.jpg,
-                        );
-                        if (croppedImgFront == null) return;
-                        final frontPathtemp = File(croppedImgFront.path);
-                        setState(() {
-                          frontPath = pickedImgFront.path;
-                        });
-                      },
-                      child: Image.file(
-                        File(frontPath!),
-                      ),
-                    ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
+        body: Center(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                    onPressed: frontPath != null
-                        ? () {
-                            setState(() {
-                              status = 'Uploading';
-                            });
+                TextFormField(
+                  controller: documentType,
+                  decoration: InputDecoration(
+                    labelText: "Enter document type",
+                    border: OutlineInputBorder()
+                  ),
+                ),
 
-                            final db = FirebaseStorage.instance.ref(
-                              '${widget.documentType}/${documentFace.value.text}/',
-                            );
-                            db.putFile(File(frontPath!)).whenComplete(() {
-                              setState(() {
-                                status = 'Uploaded';
-                              });
-                            });
-                          }
-                        : null,
-                    child: Text(status)),
+                DropdownButton<String>(
+                    value: documentFaceList,
+                    elevation: 10,
+                    style: const TextStyle(color: Colors.deepPurple),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.deepPurpleAccent,
+                    ),
+                    onChanged: (String? value) {
+                      // This is called when the user selects an item.
+                      setState(() {
+                        documentFaceList = value!;
+                        docFace = value;
+                      });
+                    },
+                    items: documentFace.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList()),
+
+                SizedBox(
+                  height: 100,
+                ),
+                //FadeInImage.assetNetwork(placeholder: "assets/sampleID.png", image: imageUrl),
+                ElevatedButton(onPressed: (){
+                  uploadImage();
+                }, child: Text(status))
+                // SizedBox(
+                //   // height: MediaQuery.of(context).size.height * .8,
+                //   width: MediaQuery.of(context).size.width * .8,
+                //   child: frontPath == null
+                //       ? InkWell(
+                //           onTap: () async {
+                //             final imgPicker = ImagePicker();
+                //             var pickedImgFront = await imgPicker.pickImage(
+                //                 source: ImageSource.gallery);
+                //             if (pickedImgFront == null) return;
+                //
+                //             CroppedFile? croppedImgFront =
+                //                 await ImageCropper().cropImage(
+                //               uiSettings: [
+                //                 AndroidUiSettings(
+                //                   toolbarColor: Colors.white,
+                //                   toolbarTitle: "Image Cropper",
+                //                 )
+                //               ],
+                //               sourcePath: pickedImgFront.path,
+                //               aspectRatio:
+                //                   const CropAspectRatio(ratioX: 20, ratioY: 13),
+                //               maxHeight: 600,
+                //               maxWidth: 600,
+                //               compressFormat: ImageCompressFormat.jpg,
+                //             );
+                //             if (croppedImgFront == null) return;
+                //             final frontPathtemp = File(croppedImgFront.path);
+                //             setState(() {
+                //               frontPath = pickedImgFront.path;
+                //             });
+                //           },
+                //           child: Image.asset("assets/sampleID.png"),
+                //         )
+                //       : InkWell(
+                //           onTap: () async {
+                //             uploadImage();
+                //
+                //             // status = 'Upload';
+                //             // final imgPicker = ImagePicker();
+                //             // var pickedImgFront = await imgPicker.pickImage(
+                //             //     source: ImageSource.gallery);
+                //             // if (pickedImgFront == null) return;
+                //             //
+                //             // CroppedFile? croppedImgFront =
+                //             //     await ImageCropper().cropImage(
+                //             //   uiSettings: [
+                //             //     AndroidUiSettings(
+                //             //       toolbarColor: Colors.white,
+                //             //       toolbarTitle: "Image Cropper",
+                //             //     )
+                //             //   ],
+                //             //   sourcePath: pickedImgFront.path,
+                //             //   aspectRatio:
+                //             //       const CropAspectRatio(ratioX: 20, ratioY: 13),
+                //             //   maxHeight: 600,
+                //             //   maxWidth: 600,
+                //             //   compressFormat: ImageCompressFormat.jpg,
+                //             // );
+                //             // if (croppedImgFront == null) return;
+                //             // final frontPathtemp = File(croppedImgFront.path);
+                //             // setState(() {
+                //             //   frontPath = pickedImgFront.path;
+                //             // });
+                //           },
+                //           child: Image.file(
+                //             File(frontPath!),
+                //           ),
+                //         ),
+                // ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     ElevatedButton(
+                //       onPressed: (){
+                //         uploadImage();
+                //       },
+                //       child: Text("ccc"),
+                //     ),
+                //     ElevatedButton(
+                //         onPressed: frontPath != null
+                //             ? () {
+                //                 setState(() {
+                //                   status = 'Uploading';
+                //                 });
+                //
+                //                 uploadImage();
+                //                 //
+                //                 // final db = FirebaseStorage.instance.ref(
+                //                 //   '${widget.documentType}/${documentFace.value.text}/',
+                //                 // );
+                //                 // db.putFile(File(frontPath!)).whenComplete(() {
+                //                 //   setState(() {
+                //                 //     status = 'Uploaded';
+                //                 //   });
+                //                 // });
+                //
+                //               }
+                //             : null,
+                //         child: Text(status)),
+                //   ],
+                // )
               ],
-            )
-          ],
+            ),
+          ),
         ));
   }
 }

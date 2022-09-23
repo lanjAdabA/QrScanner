@@ -1,6 +1,9 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:qrscanner/router/router.gr.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyWalletPage extends StatefulWidget {
   const MyWalletPage({Key? key}) : super(key: key);
@@ -9,79 +12,86 @@ class MyWalletPage extends StatefulWidget {
   State<MyWalletPage> createState() => _MyWalletPageState();
 }
 
+
+
 class _MyWalletPageState extends State<MyWalletPage> {
-  final List<Map<String, dynamic>> shapeData = [
-    {
-      'shapeName': "Aadhaar",
-      'shapeImg': 'assets/ranAadhaar.jpg',
-    },
-    {
-      'shapeName': "Driving Licence",
-      'shapeImg': 'assets/drivingL.jpg',
-    },
-    {
-      'shapeName': "Pan Card",
-      'shapeImg': 'assets/ramPAN.jpg',
-    },
-    {
-      'shapeName': "Voter Card",
-      'shapeImg': 'assets/ranVoter.jpg',
-    },
-    {
-      'shapeName': "Add new",
-      'shapeImg': 'assets/sampleID.png',
-    },
-  ];
+
+  List title = [];
+  //List faceCount =[];
+  List imgUrl = [];
+  var arg_json;
+  late String phoneNum;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPhone();
+  }
+  void getPhone() async {
+    final prefs = await SharedPreferences.getInstance();
+    phoneNum = prefs.getString("PhoneNumber").toString();
+  }
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text("Number_Chart"),
-        centerTitle: true,
-      ),
-      body: CarouselSlider(
-        options: CarouselOptions(
-          enlargeCenterPage: true,
-          scrollDirection: Axis.vertical,
-          enableInfiniteScroll: true,
-          viewportFraction: .43,
-          height: height * 1,
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: const Text("Documents"),
+          centerTitle: true,
         ),
-        items: shapeData.map((e) {
-          return Container(
-            decoration: BoxDecoration(
-              // color: e["shapeColor"],
-              color: Colors.purple[50],
-              borderRadius: const BorderRadius.all(
-                Radius.circular(30),
-              ),
-            ),
-            width: width * 1,
-            height: height / 2.6,
-            child: GestureDetector(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    e["shapeName"],
-                    style: TextStyle(
-                        fontFamily: "titanOne", fontSize: height * 0.04),
-                  ),
-                  SizedBox(
-                      height: height / 3,
-                      width: width / 1.5,
-                      child: Image.asset(e["shapeImg"])),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
-      ),
+        body: Builder(
+          builder: (BuildContext context) {
+            late DatabaseReference _dbref;
+            _dbref = FirebaseDatabase.instance.ref("documentkeeper");
+            return StreamBuilder(
+              stream: _dbref.onValue,
+                builder: (context, snapshot) {
+                  List messageList = [];
+                  if (snapshot.hasData &&
+                      snapshot.data != null &&
+                      (snapshot.data! as DatabaseEvent).snapshot.value !=
+                          null) {
+                    final myMessages = Map<dynamic, dynamic>.from(
+                        (snapshot.data! as DatabaseEvent).snapshot.value
+                        as Map<dynamic, dynamic>);
+                     title = [];
+                     imgUrl = [];
+                    myMessages[phoneNum]["data"].forEach((k,v){
+                      title.add(k);
+                      //faceCount = myMessages["+917005807751"]["data"][k].length;
+                      arg_json = myMessages[phoneNum]["data"];
+
+
+                    });
+
+
+                    return Center(
+                      child: Container(
+                        child: ListView.builder(
+                          itemCount: title.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return InkWell(
+                              onTap: (){
+                                context.router.push(UploadImageView(rjson :arg_json[title[index]],titleSpace: title[index].toString()));
+                              },
+                              child: Card(
+                                  child: ListTile(
+                                    leading: Icon(Icons.book),
+                                    title: Text("${title[index]}"),
+                                    trailing: CircleAvatar(child: Text(arg_json[title[index]].length.toString())),
+                                  )),
+                            );
+                          },)
+                      ),
+                    );
+                  }
+                  return Container();
+                }
+            );
+          },
+        )
     );
   }
 }

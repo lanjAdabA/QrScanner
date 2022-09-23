@@ -13,10 +13,16 @@ import 'package:qrscanner/pages/qr_create.page.dart';
 import 'package:qrscanner/pages/qr_scan.page.dart';
 import 'package:qrscanner/pages/signup.page.dart';
 
+import '../new/loadingScreen.dart';
+import '../new/loginscreen.dart';
+import '../new/uploadImageView.dart';
+
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: <AutoRoute>[
-    AutoRoute(page: HomePage, initial: true),
+    AutoRoute(page: LoadingScreen, initial: true),
+    AutoRoute(page: LoginScreen),
+    AutoRoute(page: HomePage),
     AutoRoute(page: QrCreatePage),
     AutoRoute(page: QrScannerPage),
     AutoRoute(page: AadhaarScannerPage),
@@ -26,6 +32,7 @@ import 'package:qrscanner/pages/signup.page.dart';
     AutoRoute(page: SignInPage),
     AutoRoute(page: SignUpPage),
     AutoRoute(page: MyWalletPage),
+    AutoRoute(page: UploadImageView),
   ],
 )
 class $AppRouter {}

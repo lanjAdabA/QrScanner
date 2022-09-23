@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:qrscanner/router/router.gr.dart';
-import 'package:qrscanner/widgets/login_icon.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,7 +22,38 @@ class _HomePageState extends State<HomePage> {
           IconButton(
               icon: const Icon(Icons.login),
               onPressed: () {
-                const LogInWidget();
+                showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('LOGOUT'),
+                      content: const Text('Do you want to logout'),
+                      actions: <Widget>[
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            textStyle: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          child: const Text('Yes'),
+                          onPressed: () async {
+                            // Obtain shared preferences.
+                            final prefs = await SharedPreferences.getInstance();
+                            prefs.setString("PhoneNumber", "");
+                            context.router.replace(LoginScreen());
+                          },
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            textStyle: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          child: const Text('Cancel'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               })
         ],
       ),
@@ -130,7 +161,7 @@ class _HomePageState extends State<HomePage> {
               ),
               GestureDetector(
                 onTap: () {
-                  context.router.push(const CreateIdFolderRoute());
+                  context.router.push(UploadImageRoute(documentType: "sdf"));
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
