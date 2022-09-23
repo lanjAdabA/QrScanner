@@ -1,18 +1,27 @@
 {
   "project_info": {
     "project_number": "198965426584",
+    "firebase_url": "https://qrscanner-7405e-default-rtdb.firebaseio.com",
     "project_id": "qrscanner-7405e",
     "storage_bucket": "qrscanner-7405e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:198965426584:android:2ca2c8f1009a7aceb353ed",
+        "mobilesdk_app_id": "1:198965426584:android:d433d947391126dfb353ed",
         "android_client_info": {
-          "package_name": "com.example.qrscanner"
+          "package_name": "com.ranjita.qrscanner"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "198965426584-eu9bhfadfrcot7u9okdho2ab4sd090lo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ranjita.qrscanner",
+            "certificate_hash": "98ca3ed205d59ae08abdc180c9ef3f940597d911"
+          }
+        },
         {
           "client_id": "198965426584-g8nruhrad67lqcu8me81kikmh02d4euh.apps.googleusercontent.com",
           "client_type": 3
